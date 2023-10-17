@@ -4,10 +4,10 @@ describe('SignUp Controller', () => {
     const sut = new SignUpController()
     const httpRequest = {
       body: {
-        email: 'any_email@emai.com',
+        email: 'any_email@email.com',
         password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
+        passwordConfirmation: 'any_password'
+      }
     }
     const httpResponse = sut.handle(httpRequest)
 
