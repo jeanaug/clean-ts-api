@@ -1,5 +1,3 @@
 import app from './config/app'
 
-app.listen(app, () => {
-  console.log('Server running at http://localhost:5050')
-})
+app.listen(5050, () => console.log('Server running at http://localhost:5050'))
