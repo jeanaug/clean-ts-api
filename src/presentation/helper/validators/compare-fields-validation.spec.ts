@@ -1,18 +1,24 @@
-import { RequiredFieldValidation } from './required-field-validation'
-import { MissingParamError } from '../../errors'
+import { InvalidParamError } from '../../errors'
+import { CompareFieldsValidation } from './compare-fields-validation'
 
-const makeSut = (): RequiredFieldValidation => {
-  return new RequiredFieldValidation('field')
+const makeSut = (): CompareFieldsValidation => {
+  return new CompareFieldsValidation('field', 'fieldToCompare')
 }
-describe('Required Field Validattion', () => {
-  test('Should return a MissinParamError if validation fails', async () => {
+describe('Compare Field Validattion', () => {
+  test('Should return a InvalidParamError if validation fails', async () => {
     const sut = makeSut()
-    const error = sut.validate({ name: 'any_field' })
-    expect(error).toEqual(new MissingParamError('field'))
+    const error = sut.validate({
+      field: 'any_value',
+      fieldToCompare: 'wrong_value',
+    })
+    expect(error).toEqual(new InvalidParamError('fieldToCompare'))
   })
   test('Should not return if validation succeeds', async () => {
     const sut = makeSut()
-    const error = sut.validate({ field: 'any_field' })
+    const error = sut.validate({
+      field: 'any_value',
+      fieldToCompare: 'any_value',
+    })
     expect(error).toBeFalsy()
   })
 })
