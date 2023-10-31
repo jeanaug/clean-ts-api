@@ -1,13 +1,8 @@
 import { AccountModel } from '../../../domain/models/account'
 
 import { MissingParamError, ServerError } from '../../errors'
-import {
-  AddAccount,
-  AddAccountModel,
-  HttpRequest,
-  Validation,
-} from './signup-protocols'
-import { SignUpController } from './signup'
+import { AddAccount, AddAccountModel, HttpRequest, Validation } from './signup-controller-protocols'
+import { SignUpController } from './signup-controller'
 import { badRequest, ok, serverError } from '../../helper/http/http-helper'
 
 const makeFakeAccount = (): AccountModel => {
@@ -98,9 +93,7 @@ describe('SignUp Controller', () => {
 
   it('Should return 400 if Validation returns an error', async () => {
     const { sut, validationStub } = makeSut()
-    jest
-      .spyOn(validationStub, 'validate')
-      .mockReturnValueOnce(new MissingParamError('any_field'))
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('any_field'))
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
   })
