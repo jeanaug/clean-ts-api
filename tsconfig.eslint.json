@@ -3,5 +3,5 @@
     "types": ["jest"]
   },
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "dist", "coverage"]
+  "exclude": []
 }
