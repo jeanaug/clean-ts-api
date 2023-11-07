@@ -13,7 +13,7 @@
     "test:int": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
-    "prepare": "husky install"
+     "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -56,6 +56,6 @@
     "validator": "^13.11.0"
   },
   "engines": {
-    "node": "18.x"
+    "node": "12.x"
   }
 }
