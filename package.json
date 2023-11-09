@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc",
-    "build:w":"tsc -w ",
+    "build:w": "tsc -w ",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "dev": "sucrase-node src/main/server.ts",
     "up": "npm run build && docker-compose up -d",
@@ -16,7 +16,7 @@
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:int": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
-    "test:ci": "npm test -- --coverage",
+    "test:ci": "npm test -- --coverage --no-cache",
     "//prepare": "husky install"
   },
   "keywords": [],
