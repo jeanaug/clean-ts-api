@@ -1,3 +1,5 @@
+import { MissingParamError } from '../../../errors'
+import { badRequest } from '../../../helper/http/http-helper'
 import { AddSurveyContoller } from './add-survey-controller'
 import { HttpRequest, Validation } from './add-survey-controller-protocols'
 
@@ -27,7 +29,6 @@ const makeValidation = (): Validation => {
       return null
     }
   }
-
   return new ValidationStub()
 }
 describe('AddSurvery Controller', () => {
@@ -37,5 +38,12 @@ describe('AddSurvery Controller', () => {
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+  })
+
+  test('Should return 400 if validation fails ', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+    const response = await sut.handle(makeFakeRequest())
+    expect(response).toEqual(badRequest(new Error()))
   })
 })
