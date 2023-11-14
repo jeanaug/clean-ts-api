@@ -5,28 +5,20 @@ services:
     image: mongo:7
     restart: always
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - ./data:/data/db
-    networks:
-      - node-network    
   api:
-    container_name: api-container    
+    container_name: api-container
     image: node:18
     working_dir: /usr/src/clean-node-api
     restart: always
     command: bash -c "npm install --only=production --legacy-peer-deps && npm run debug"
-    volumes: 
+    volumes:
       - ./dist/:/usr/src/clean-node-api/dist/
       - ./package.json:/usr/src/clean-node-api/package.json
     ports:
-      - "5050:5050"
-      - "9222:9222"
-    networks:
-      - node-network
+      - '5050:5050'
+      - '9222:9222'
 volumes:
   data:
-networks:
-  node-network:
-    driver: bridge
-    
