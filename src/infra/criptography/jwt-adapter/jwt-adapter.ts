@@ -8,8 +8,8 @@ export class JwtAdapter implements Encrypter, Decrypter {
     const token = jwt.sign({ id: value }, this.secret)
     return new Promise(resolve => resolve(token))
   }
-  async decrypt(value: string): Promise<string> {
-    jwt.verify(value, this.secret)
-    return null
+  async decrypt(token: string): Promise<string> {
+    const value = jwt.verify(token, this.secret)
+    return new Promise(resolve => resolve(value as any))
   }
 }
