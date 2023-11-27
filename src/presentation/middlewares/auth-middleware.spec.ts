@@ -14,7 +14,7 @@ const makeFakeRequest = (): HttpRequest => ({
   headers: { 'x-access-token': 'any_token' },
 })
 
-interface SutTypes {
+type SutTypes = {
   sut: AuthMiddleware
   loadAccountByTokenStub: LoadAccountByToken
 }
