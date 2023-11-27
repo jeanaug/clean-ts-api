@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"mongoUri":"mongodb://127.0.0.1:50863/jest?","mongoDBName":"jest"}
-=======
-{"mongoUri":"mongodb://127.0.0.1:50637/jest?","mongoDBName":"jest"}
->>>>>>> refactor/paths
+{"mongoUri":"mongodb://127.0.0.1:50942/jest?","mongoDBName":"jest"}
