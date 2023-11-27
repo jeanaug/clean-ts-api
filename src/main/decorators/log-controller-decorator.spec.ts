@@ -1,9 +1,10 @@
-import { LogErrorRepository } from '../../data/protocols/db/log/log-error-repository'
-import { AccountModel } from '../../domain/models/account'
-import { serverError, ok } from '../../presentation/helper/http/http-helper'
-import { HttpRequest, HttpResponse } from '../../presentation/protocols'
-import { Controller } from '../../presentation/protocols/controller'
 import { LogControllerDecorator } from './log-controller-decorator'
+import { serverError, ok } from '@/presentation/helper/http/http-helper'
+import { HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { Controller } from '@/presentation/protocols/controller'
+import { AccountModel } from '@/domain/models/account'
+import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository'
+
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
