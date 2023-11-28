@@ -3,7 +3,7 @@ import { SurveyResultModel } from '@/domain/models/survey-result'
 import { LoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository'
 import MockDate from 'mockdate'
 
-const makeFakeSurveyResult = (): SurveyResultModel => {
+const makeFakeSurvey = (): SurveyResultModel => {
   return {
     id: 'any_id',
     surveyId: 'any_survey_id',
@@ -16,7 +16,7 @@ const makeFakeSurveyResult = (): SurveyResultModel => {
 const makeLoadSurveyByIdRepository = (): LoadSurveyByIdRepository => {
   class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
     loadById(id: string): Promise<SurveyResultModel> {
-      return new Promise(resolve => resolve(makeFakeSurveyResult()))
+      return new Promise(resolve => resolve(makeFakeSurvey()))
     }
   }
 
