@@ -104,7 +104,6 @@ describe('Survey Mongo Repository', () => {
     const sut = makesut()
     const fakeId = '1'.repeat(24)
     const survey = await sut.loadById(fakeId)
-    console.log('survey', survey)
     expect(survey).toBeNull()
   })
 })
