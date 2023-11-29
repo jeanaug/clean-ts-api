@@ -72,6 +72,7 @@ describe('Survey Mongo Repository', () => {
       const sut = makesut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(2)
+      expect(surveys[0].id).toBeTruthy()
       expect(surveys[0].question).toBe('any_question')
       expect(surveys[1].question).toBe('other_question')
     })
@@ -98,6 +99,8 @@ describe('Survey Mongo Repository', () => {
       const sut = makesut()
       const survey = await sut.loadById(result.insertedId.toString())
       expect(survey.id).toEqual(result.insertedId)
+      expect(survey).toBeTruthy()
+      expect(survey.id).toBeTruthy()
     })
   })
   test('Should retuns null if id not existis', async () => {
