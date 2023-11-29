@@ -4,6 +4,7 @@ import { SurveyModel } from '@/domain/models/survey'
 import MockDate from 'mockdate'
 import { Collection } from 'mongodb'
 import { AccountModel } from '@/domain/models/account'
+import { SurveyResultModel } from '@/domain/models/survey-result'
 
 let surveyCollection: Collection
 let accountCollection: Collection
@@ -27,6 +28,18 @@ const makeSurvey = async (): Promise<SurveyModel> => {
   await surveyCollection.insertOne(data)
 
   return MongoHelper.map(data)
+}
+const makeSurveyResult = async (survey: SurveyModel, account: AccountModel): Promise<SurveyResultModel> => {
+  const saveSurveyResultData = {
+    surveyId: survey.id,
+    accountId: account.id,
+    answer: survey.answers[0].answer,
+    date: new Date(),
+  }
+
+  await surveyResultCollection.insertOne(saveSurveyResultData)
+
+  return MongoHelper.map(saveSurveyResultData)
 }
 
 const makeAccount = async (): Promise<AccountModel> => {
@@ -78,5 +91,20 @@ describe('Mongo Survey Result Repository', () => {
       expect(surveyResult.id).toBeTruthy()
       expect(surveyResult.answer).toBe(survey.answers[0].answer)
     })
+  })
+  test('Should update an exists survey result', async () => {
+    const sut = makesut()
+    const survey = await makeSurvey()
+    const account = await makeAccount()
+    const surveyResult = await makeSurveyResult(survey, account)
+    const saveSurveyResultData = {
+      surveyId: surveyResult.surveyId,
+      accountId: surveyResult.accountId,
+      answer: 'other_answer',
+      date: new Date(),
+    }
+    const updatedSurveyResult = await sut.save(saveSurveyResultData)
+    expect(updatedSurveyResult.id).toEqual(surveyResult.id)
+    expect(updatedSurveyResult.answer).toBe('other_answer')
   })
 })

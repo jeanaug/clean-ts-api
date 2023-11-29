@@ -1,5 +1,6 @@
 import { SaveSurveyResultModel, SaveSurveyResultRepository, SurveyResultModel } from '@/data/usecases/save-survey-result/db-save-survey-result-protocols'
 import { MongoHelper } from '../helpers/mongo-helper'
+import { ObjectId } from 'mongodb'
 
 export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
   async save(data: SaveSurveyResultModel): Promise<SurveyResultModel> {
@@ -7,8 +8,8 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
 
     const doc = await surveyResultCollection.findOneAndUpdate(
       {
-        surveyId: data.surveyId,
-        accountId: data.accountId,
+        surveyId: new ObjectId(data.surveyId),
+        accountId: new ObjectId(data.accountId),
       },
       {
         $set: {
@@ -22,6 +23,6 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
       },
     )
 
-    return MongoHelper.map(doc)
+    return doc && MongoHelper.map(doc)
   }
 }
