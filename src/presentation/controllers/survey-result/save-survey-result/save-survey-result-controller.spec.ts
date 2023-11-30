@@ -69,7 +69,7 @@ const makeSut = (): SutTypes => {
   const sut = new SaveSurveyResultController(loadSurveyByIdStub, saveSurveyResultStub)
   return { sut, saveSurveyResultStub, loadSurveyByIdStub }
 }
-describe('SaveSurveyResult Controller', () => {
+describe('SaveSurveyResultController', () => {
   beforeAll(() => {
     MockDate.set(new Date())
   })
@@ -89,6 +89,13 @@ describe('SaveSurveyResult Controller', () => {
     jest.spyOn(loadSurveyByIdStub, 'loadById').mockReturnValueOnce(null)
     const response = await sut.handle(makeFakeRequest())
     expect(response).toEqual(forbidden(new InvalidParamError('surveyID')))
+  })
+  test('Should retunr 403 if answer is ivalid', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut()
+    const request = Object.assign({}, makeFakeRequest())
+    request.body.answer = 'other_answer'
+    const response = await sut.handle(request)
+    expect(response).toEqual(forbidden(new InvalidParamError('answer')))
   })
   test('Should call SaveSurveyResult with correct value', async () => {
     const { sut, saveSurveyResultStub } = makeSut()
