@@ -2,7 +2,7 @@ import { SaveSurveyResultController } from './save-survey-result-controller'
 import { SaveSurveyResult, SaveSurveyResultModel, SurveyResultModel } from '@/data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols'
 import MockDate from 'mockdate'
 import { HttpRequest } from './save-survey-result-controller-protocols'
-import { serverError } from '@/presentation/helper/http/http-helper'
+import { ok, serverError } from '@/presentation/helper/http/http-helper'
 
 const makeFakeSaveSurveyResultData = (): SaveSurveyResultModel => {
   return {
@@ -59,5 +59,11 @@ describe('SaveSurveyResult Controller', () => {
     )
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should retunr 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok(makeFakeSurveyResult()))
   })
 })
