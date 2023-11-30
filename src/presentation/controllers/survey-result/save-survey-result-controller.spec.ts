@@ -1,8 +1,8 @@
 import { SaveSurveyResultController } from './save-survey-result-controller'
-import { SaveSurveyResult, SaveSurveyResultModel, SurveyResultModel } from '@/data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols'
-import MockDate from 'mockdate'
 import { HttpRequest } from './save-survey-result-controller-protocols'
+import { SaveSurveyResult, SaveSurveyResultModel, SurveyResultModel } from '@/data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols'
 import { ok, serverError } from '@/presentation/helper/http/http-helper'
+import MockDate from 'mockdate'
 
 const makeFakeSaveSurveyResultData = (): SaveSurveyResultModel => {
   return {
