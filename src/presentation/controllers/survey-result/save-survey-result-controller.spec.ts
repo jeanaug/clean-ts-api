@@ -2,6 +2,7 @@ import { SaveSurveyResultController } from './save-survey-result-controller'
 import { SaveSurveyResult, SaveSurveyResultModel, SurveyResultModel } from '@/data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols'
 import MockDate from 'mockdate'
 import { HttpRequest } from './save-survey-result-controller-protocols'
+import { serverError } from '@/presentation/helper/http/http-helper'
 
 const makeFakeSaveSurveyResultData = (): SaveSurveyResultModel => {
   return {
@@ -48,5 +49,15 @@ describe('SaveSurveyResult Controller', () => {
     const saveSpy = jest.spyOn(saveSurveyResultStub, 'save')
     await sut.handle(makeFakeRequest())
     expect(saveSpy).toHaveBeenCalledWith(makeFakeRequest().body)
+  })
+  test('Should retunr 500 if SaveSurveyResult throws', async () => {
+    const { sut, saveSurveyResultStub } = makeSut()
+    jest.spyOn(saveSurveyResultStub, 'save').mockReturnValueOnce(
+      new Promise((resolve, reject) => {
+        reject(new Error())
+      }),
+    )
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
