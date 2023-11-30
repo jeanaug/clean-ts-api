@@ -92,9 +92,9 @@ describe('SaveSurveyResultController', () => {
   })
   test('Should retunr 403 if answer is ivalid', async () => {
     const { sut, loadSurveyByIdStub } = makeSut()
-    const request = Object.assign({}, makeFakeRequest())
-    request.body.answer = 'other_answer'
-    const response = await sut.handle(request)
+    const httpRequest = Object.assign({}, makeFakeRequest())
+    httpRequest.body.answer = 'other_answer'
+    const response = await sut.handle(httpRequest)
     expect(response).toEqual(forbidden(new InvalidParamError('answer')))
   })
   test('Should call SaveSurveyResult with correct value', async () => {
