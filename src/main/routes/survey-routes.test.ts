@@ -7,28 +7,27 @@ import { sign } from 'jsonwebtoken'
 
 let surveyCollection: Collection
 let accountCollection: Collection
+const makeAccesToken = async (): Promise<string> => {
+  const res = await accountCollection.insertOne({
+    name: 'Jean',
+    email: 'jean.aug@outlook.com.br',
+    password: '123',
+    role: 'admin',
+  })
+
+  const id = res.insertedId
+  const accessToken = sign({ id }, env.jwtSecret)
+
+  await accountCollection.updateOne(
+    { _id: id },
+    {
+      $set: { accessToken },
+    },
+  )
+  return accessToken
+}
 
 describe('Survey Routes', () => {
-  const makeAccesToken = async (): Promise<string> => {
-    const res = await accountCollection.insertOne({
-      name: 'Jean',
-      email: 'jean.aug@outlook.com.br',
-      password: '123',
-      role: 'admin',
-    })
-
-    const id = res.insertedId
-    const accessToken = sign({ id }, env.jwtSecret)
-
-    await accountCollection.updateOne(
-      { _id: id },
-      {
-        $set: { accessToken },
-      },
-    )
-    return accessToken
-  }
-
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL as any)
   })
