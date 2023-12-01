@@ -12,10 +12,9 @@ export class SaveSurveyResultController implements Controller {
       const { surveyId } = httpRequest.params
       const { answer } = httpRequest.body
       const { accountId } = httpRequest
-
       const survey = await this.loadSurveyById.loadById(surveyId)
-      if (!survey) return forbidden(new InvalidParamError('surveyID'))
 
+      if (!survey) return forbidden(new InvalidParamError('surveyID'))
       if (!survey.answers.find(answers => answers.answer === answer)) return forbidden(new InvalidParamError('answer'))
 
       const surveyResult = await this.saveSurveyResult.save({
