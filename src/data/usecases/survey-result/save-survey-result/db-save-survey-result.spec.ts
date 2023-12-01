@@ -24,29 +24,16 @@ const makeFakeSurvey = (): SurveyModel => ({
   date: new Date(),
 })
 
-const makeLoadSurveyByIdRepository = (): LoadSurveyByIdRepository => {
-  class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
-    loadById(id: string): Promise<SurveyModel> {
-      return new Promise(resolve => resolve(makeFakeSurvey()))
-    }
-  }
-
-  return new LoadSurveyByIdRepositoryStub()
-}
-
 type SutTypes = {
   sut: DbSaveSurveyResult
   saveSurveyResultRepositoryStub: SaveSurveyResultRepository
-  loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository
 }
 const makeSut = (): SutTypes => {
   const saveSurveyResultRepositoryStub = makeSaveSurveyResultRepository()
-  const loadSurveyByIdRepositoryStub = makeLoadSurveyByIdRepository()
-  const sut = new DbSaveSurveyResult(saveSurveyResultRepositoryStub, loadSurveyByIdRepositoryStub)
+  const sut = new DbSaveSurveyResult(saveSurveyResultRepositoryStub)
   return {
     sut,
     saveSurveyResultRepositoryStub,
-    loadSurveyByIdRepositoryStub,
   }
 }
 const makeFakeSaveSurveyResultData = (): SaveSurveyResultModel => {
@@ -73,12 +60,6 @@ describe('DbSaveSurveyResult', () => {
     const saveSpy = jest.spyOn(saveSurveyResultRepositoryStub, 'save')
     await sut.save(makeFakeSaveSurveyResultData())
     expect(saveSpy).toHaveBeenCalledWith(makeFakeSaveSurveyResultData())
-  })
-  test('Should call LoadSurveyByIdRepository with correct value', async () => {
-    const { sut, loadSurveyByIdRepositoryStub } = makeSut()
-    const loadByIdSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById')
-    await sut.save(makeFakeSaveSurveyResultData())
-    expect(loadByIdSpy).toHaveBeenCalledWith(makeFakeSaveSurveyResultData().surveyId)
   })
 
   test('Should return a SurveyResult on success', async () => {
