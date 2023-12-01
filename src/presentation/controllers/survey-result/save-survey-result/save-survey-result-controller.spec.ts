@@ -26,6 +26,7 @@ const makeFakeRequest = (): HttpRequest => ({
   params: {
     surveyId: 'any_survey_id',
   },
+  accountId: 'any_account_id',
 })
 
 const makeFakeSurvey = (): SurveyModel => ({
