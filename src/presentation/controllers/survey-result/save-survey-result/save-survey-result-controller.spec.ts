@@ -1,4 +1,4 @@
-import { mockSaveSurveyResultData, mockSurvey, mockSurveyResult } from '@/domain/test'
+import { mockSaveSurveyResultData, mockSurvey, mockSurveyResult, throwError } from '@/domain/test'
 import { SaveSurveyResultController } from './save-survey-result-controller'
 import { HttpRequest } from './save-survey-result-controller-protocols'
 import { SaveSurveyResult } from '@/data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols'
@@ -63,11 +63,7 @@ describe('SaveSurveyResultController', () => {
   })
   test('Should retunr 500 if SaveSurveyResult throws', async () => {
     const { sut, saveSurveyResultStub } = makeSut()
-    jest.spyOn(saveSurveyResultStub, 'save').mockReturnValueOnce(
-      new Promise((resolve, reject) => {
-        reject(new Error())
-      }),
-    )
+    jest.spyOn(saveSurveyResultStub, 'save').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })
