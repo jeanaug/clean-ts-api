@@ -1,3 +1,4 @@
+import { throwError } from '@/domain/test'
 import { SignUpController } from './signup-controller'
 import { AddAccount, AddAccountParams, Authentication, AuthenticationParams, HttpRequest, Validation } from './signup-controller-protocols'
 import { EmailInUseError, MissingParamError, ServerError } from '@/presentation/errors'
@@ -30,11 +31,7 @@ const makeSut = (): SutTypes => {
 describe('SignUp Controller', () => {
   it('Should return 500 if AddAccount throws', async () => {
     const { sut, addAccountStub } = makeSut()
-    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
-      return new Promise((resolve, reject) => {
-        reject(new Error())
-      })
-    })
+    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(throwError)
 
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null as any)))
