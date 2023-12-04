@@ -8,6 +8,7 @@ module.exports = {
     '!**/test/**',
     '!**/domain/**',
     '!src/**/index.ts',
+    '!**/test/**',
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'babel',
