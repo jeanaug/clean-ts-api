@@ -1,6 +1,6 @@
-import { loginPath } from './paths/login-path'
-import { accountSchema } from './schemas/account-schemas'
-import { loginParamsSchema } from './schemas/login-params-schemas'
+import { loginPath } from './paths'
+import { accountSchema, loginParamsSchema, errorSchema } from './schemas'
+import { badRequest, notFound, serverError, unauthorized } from './components'
 
 export default {
   openapi: '3.0.0',
@@ -8,6 +8,10 @@ export default {
     title: 'Clean Node Api',
     description: 'API do curso para realizar enquetes para programadores',
     version: '1.0.0',
+  },
+  license: {
+    name: 'LGPL-3.0-or-later',
+    url: 'https://www.gnu.org/licenses/lgpl-3.0.html',
   },
   servers: [
     {
@@ -25,5 +29,12 @@ export default {
   schemas: {
     account: accountSchema,
     loginParams: loginParamsSchema,
+    error: errorSchema,
+  },
+  components: {
+    badRequest,
+    serverError,
+    unauthorized,
+    notFound,
   },
 }
