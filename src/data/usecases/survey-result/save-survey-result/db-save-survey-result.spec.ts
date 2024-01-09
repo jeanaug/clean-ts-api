@@ -1,4 +1,4 @@
-import { mockSaveSurveyResultData, mockSurveyResult, throwError } from '@/domain/test'
+import { mockSaveSurveyResultData, mockSurveyResultModel, throwError } from '@/domain/test'
 import { DbSaveSurveyResult } from './db-save-survey-result'
 import { SaveSurveyResultRepository } from './db-save-survey-result-protocols'
 
@@ -37,7 +37,7 @@ describe('DbSaveSurveyResult', () => {
   test('Should return a SurveyResult on success', async () => {
     const { sut } = makeSut()
     const SurveyResultData = await sut.save(mockSaveSurveyResultData())
-    expect(SurveyResultData).toEqual(mockSurveyResult())
+    expect(SurveyResultData).toEqual(mockSurveyResultModel())
   })
 
   test('Should throw if SaveSurveyResultRepository throws', async () => {

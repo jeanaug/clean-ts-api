@@ -1,4 +1,4 @@
-import { mockSaveSurveyResultData, mockSurvey, mockSurveyResult, throwError } from '@/domain/test'
+import { mockSaveSurveyResultData, mockSurvey, mockSurveyResultModel, throwError } from '@/domain/test'
 import { SaveSurveyResultController } from './save-survey-result-controller'
 import { HttpRequest } from './save-survey-result-controller-protocols'
 import { SaveSurveyResult } from '@/data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols'
@@ -71,6 +71,6 @@ describe('SaveSurveyResultController', () => {
   test('Should retunr 200 on success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
-    expect(httpResponse).toEqual(ok(mockSurveyResult()))
+    expect(httpResponse).toEqual(ok(mockSurveyResultModel()))
   })
 })

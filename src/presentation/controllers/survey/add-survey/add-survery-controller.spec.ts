@@ -1,6 +1,6 @@
 import { mockValidation } from '@/validation/validators/test'
 import { AddSurveyContoller } from './add-survey-controller'
-import { HttpRequest, Validation, AddSurvey, AddSurveyParams } from './add-survey-controller-protocols'
+import { HttpRequest, Validation, AddSurvey } from './add-survey-controller-protocols'
 import { badRequest, noContent, serverError } from '@/presentation/helper/http/http-helper'
 import MockDate from 'mockdate'
 import { mockAddSurvey } from '@/presentation/test'
