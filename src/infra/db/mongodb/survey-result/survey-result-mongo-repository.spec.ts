@@ -2,7 +2,7 @@ import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { SurveyModel } from '@/domain/models/survey'
 import MockDate from 'mockdate'
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 import { AccountModel } from '@/domain/models/account'
 import { SurveyResultModel } from '@/domain/models/survey-result'
 
@@ -10,25 +10,32 @@ let surveyCollection: Collection
 let accountCollection: Collection
 let surveyResultCollection: Collection
 
-const makesut = (): SurveyResultMongoRepository => {
+const makeSut = (): SurveyResultMongoRepository => {
   return new SurveyResultMongoRepository()
 }
 
 const makeSurvey = async (): Promise<SurveyModel> => {
-  const data = {
+  const surveyParam = {
     question: 'any_question',
     answers: [
       {
         image: 'any_image',
-        answer: 'any_answer',
+        answer: 'any_answer_1',
+      },
+      {
+        answer: 'any_answer_2',
+      },
+      {
+        answer: 'any_answer_3',
       },
     ],
     date: new Date(),
   }
-  await surveyCollection.insertOne(data)
+  const res = await surveyCollection.insertOne(surveyParam)
 
-  return MongoHelper.map(data)
+  return Object.assign(surveyParam, { id: res.insertedId.toString() }) as SurveyModel
 }
+
 const makeSurveyResult = async (survey: SurveyModel, account: AccountModel): Promise<SurveyResultModel> => {
   const saveSurveyResultData = {
     surveyId: survey.id,
@@ -44,15 +51,15 @@ const makeSurveyResult = async (survey: SurveyModel, account: AccountModel): Pro
 
 const makeAccount = async (): Promise<AccountModel> => {
   const data = {
-    name: 'valid_name',
-    email: 'valid_email@mail.com',
-    password: 'valid_password',
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    password: 'any_password',
   }
   await accountCollection.insertOne(data)
   return MongoHelper.map(data)
 }
 
-describe('Mongo Survey Result Repository', () => {
+describe('Survey Result Mongo Repository', () => {
   beforeAll(async () => {
     MockDate.set(new Date())
     await MongoHelper.connect(process.env.MONGO_URL as any)
@@ -75,36 +82,46 @@ describe('Mongo Survey Result Repository', () => {
 
   describe('Save()', () => {
     test('Should add a survey result if its new ', async () => {
-      const sut = makesut()
+      const sut = makeSut()
       const survey = await makeSurvey()
       const account = await makeAccount()
 
-      const saveSurveyResultData = {
+      const surveyResult = await sut.save({
         surveyId: survey.id,
         accountId: account.id,
         answer: survey.answers[0].answer,
         date: new Date(),
-      }
-      const surveyResult = await sut.save(saveSurveyResultData)
+      })
 
       expect(surveyResult).toBeTruthy()
-      expect(surveyResult.id).toBeTruthy()
-      expect(surveyResult.answer).toBe(survey.answers[0].answer)
+      expect(surveyResult.surveyId.toString()).toEqual(survey.id)
+      expect(surveyResult.answers[0].answer).toBe(survey.answers[0].answer)
+      expect(surveyResult.answers[0].count).toBe(1)
+      expect(surveyResult.answers[0].percent).toBe(100)
     })
   })
   test('Should update an exists survey result', async () => {
-    const sut = makesut()
     const survey = await makeSurvey()
     const account = await makeAccount()
-    const surveyResult = await makeSurveyResult(survey, account)
-    const saveSurveyResultData = {
-      surveyId: surveyResult.surveyId,
-      accountId: surveyResult.accountId,
-      answer: 'other_answer',
+    await surveyResultCollection.insertOne({
+      surveyId: new ObjectId(survey.id),
+      accountId: new ObjectId(account.id),
+      answer: survey.answers[0].answer,
       date: new Date(),
-    }
-    const updatedSurveyResult = await sut.save(saveSurveyResultData)
-    expect(updatedSurveyResult.id).toEqual(surveyResult.id)
-    expect(updatedSurveyResult.answer).toBe('other_answer')
+    })
+    const sut = makeSut()
+
+    const surveyResult = await sut.save({
+      surveyId: survey.id,
+      accountId: account.id,
+      answer: survey.answers[1].answer,
+      date: new Date(),
+    })
+
+    expect(surveyResult).toBeTruthy()
+    expect(surveyResult.surveyId.toString()).toEqual(survey.id)
+    expect(surveyResult.answers[0].answer).toBe(survey.answers[1].answer)
+    expect(surveyResult.answers[0].count).toBe(1)
+    expect(surveyResult.answers[0].percent).toBe(100)
   })
 })
