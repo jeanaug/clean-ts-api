@@ -51,7 +51,7 @@ describe('SaveSurveyResultController', () => {
   test('Should retunr 403 if answer is ivalid', async () => {
     const { sut, loadSurveyByIdStub } = makeSut()
     const httpRequest = Object.assign({}, mockRequest())
-    httpRequest.body.answer = 'other_answer'
+    httpRequest.body.answer = 'other_answer_1'
     const response = await sut.handle(httpRequest)
     expect(response).toEqual(forbidden(new InvalidParamError('answer')))
   })
