@@ -1,5 +1,5 @@
 import { DbLoadSurveyById } from './db-load-survey-by-id'
-import { mockSurvey, throwError } from '@/domain/test'
+import { mockSurveyModel, throwError } from '@/domain/test'
 import { mockLoadSurveyByIdRepository } from '@/data/test'
 import { LoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository'
 import MockDate from 'mockdate'
@@ -31,7 +31,7 @@ describe('DbLoadSurveysById', () => {
   test('Should return a Survey  on success', async () => {
     const { sut } = makeSut()
     const surveyResult = await sut.loadById('any_id')
-    expect(surveyResult).toEqual(mockSurvey())
+    expect(surveyResult).toEqual(mockSurveyModel())
   })
   test('Should throw if LoadSurveyByIdRepository throws', async () => {
     const { sut, loadSurveyByIdRepositoryStub } = makeSut()

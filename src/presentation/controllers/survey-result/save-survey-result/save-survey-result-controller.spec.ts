@@ -1,4 +1,4 @@
-import { mockSaveSurveyResultData, mockSurvey, mockSurveyResultModel, throwError } from '@/domain/test'
+import { mockSaveSurveyResultData, mockSurveyModel, mockSurveyResultModel, throwError } from '@/domain/test'
 import { SaveSurveyResultController } from './save-survey-result-controller'
 import { HttpRequest } from './save-survey-result-controller-protocols'
 import { SaveSurveyResult } from '@/data/usecases/survey-result/save-survey-result/db-save-survey-result-protocols'
