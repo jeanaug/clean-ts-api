@@ -88,5 +88,27 @@ describe('Survey Result Route', () => {
     test('Should return 403 on save survey result without access token', async () => {
       await request(app).get('/api/surveys/any_id/results').expect(403)
     })
+
+    test('Should return 200 on Load survey result with valid accessToken', async () => {
+      const accessToken = await makeAccesToken()
+
+      const surveyData = {
+        question: 'Question',
+        answers: [
+          {
+            answer: 'Answer 1',
+            image: 'http://image-name.com',
+          },
+          {
+            answer: 'Answer 2',
+          },
+        ],
+      }
+
+      await surveyCollection.insertOne(surveyData)
+      const survey: SurveyModel = MongoHelper.map(surveyData)
+
+      await request(app).get(`/api/surveys/${survey.id}/results`).set('x-access-token', accessToken).expect(200)
+    })
   })
 })
