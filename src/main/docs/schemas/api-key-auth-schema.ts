@@ -1,8 +1,5 @@
-export const accountSchema = {
-  type: 'object',
-  properties: {
-    accessToken: {
-      type: 'string',
-    },
-  },
+export const apiKeyAuthSchema = {
+  type: 'apiKey',
+  in: 'header',
+  name: 'x-access-token',
 }
