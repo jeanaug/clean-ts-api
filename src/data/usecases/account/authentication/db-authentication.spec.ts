@@ -1,13 +1,6 @@
 import { mockFakeAuthentication, throwError } from '@/domain/test'
 import { DbAuthentication } from './db-authentication'
-import {
-  AccountModel,
-  AuthenticationParams,
-  HashComparer,
-  Encrypter,
-  UpdateAccessTokenRepository,
-  LoadAccountByEmailRepository,
-} from './db-authentication-protocols'
+import { HashComparer, Encrypter, UpdateAccessTokenRepository, LoadAccountByEmailRepository } from './db-authentication-protocols'
 import { mockEncrypter, mockHashComparer, mockLoadAccountByEmailRepository, mockUpdateAccessTokenRepository } from '@/data/test'
 
 type SutTypes = {
@@ -50,8 +43,8 @@ describe('DbAuthentication UseCase', () => {
   test('Should returns null if LoadAccountByEmailRepository returns null  ', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(Promise.resolve(null))
-    const accessToken = await sut.auth(mockFakeAuthentication())
-    expect(accessToken).toBeNull()
+    const model = await sut.auth(mockFakeAuthentication())
+    expect(model).toBeNull()
   })
 
   test('Should call HashComparer with coorect values ', async () => {
@@ -71,8 +64,8 @@ describe('DbAuthentication UseCase', () => {
   test('Should returns null if HashComparer returns false  ', async () => {
     const { sut, hashComparerStub } = makeSut()
     jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(Promise.resolve(false))
-    const accessToken = await sut.auth(mockFakeAuthentication())
-    expect(accessToken).toBeNull()
+    const model = await sut.auth(mockFakeAuthentication())
+    expect(model).toBeNull()
   })
 
   test('Should call Encrypter with correct id', async () => {
@@ -89,10 +82,11 @@ describe('DbAuthentication UseCase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return a token on success', async () => {
+  test('Should return a authenticationModel on success', async () => {
     const { sut } = makeSut()
-    const accessToken = await sut.auth(mockFakeAuthentication())
+    const { accessToken, name } = await sut.auth(mockFakeAuthentication())
     expect(accessToken).toBe('any_token')
+    expect(name).toBe('any_name')
   })
 
   test('Should call UpdateAccessTokenRepository with correct values', async () => {

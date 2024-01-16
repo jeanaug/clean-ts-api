@@ -1,6 +1,7 @@
 import { AccountModel } from '@/domain/models/account'
 import { AddAccountParams } from '@/domain/usecases/account/add-account'
 import { AuthenticationParams } from '@/domain/usecases/account/authentication'
+import { AuthenticationModel } from '../models/autheticatrion'
 
 export const mockAccountModel = (): AccountModel => ({
   id: 'any_id',
